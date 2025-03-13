@@ -6,14 +6,32 @@ use Illuminate\Support\ServiceProvider;
 
 class ArtisanizeServiceProvider extends ServiceProvider
 {
+
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            if (!is_dir(base_path('lang'))) {
+                \Artisan::call('lang:publish', ['--force' => true]);
+            }
+        }
+
+        $this->publishes([
+            base_path('lang/en') => base_path('/lang/.source'),
+        ], 'artisanize');
+
         $this->publishes([
             __DIR__ . '/app/Console/Commands/LangTranslateCommand.php' => base_path('app/Console/Commands/LangTranslateCommand.php'),
             __DIR__ . '/lang/' => base_path('lang/'),
         ], 'artisanize');
 
         $this->updateEnvFile();
+
+        if ($this->app->runningInConsole()) {
+            \Artisan::call('vendor:publish', [
+                '--tag' => 'artisanize',
+                '--force' => true,
+            ]);
+        }
     }
 
     protected function updateEnvFile()
@@ -24,7 +42,6 @@ class ArtisanizeServiceProvider extends ServiceProvider
         $envKeys = [
             '',
             '# moztopia/artisanize - lang:translate',
-            '#',
             '# LANG_TRANSLATE_BASEPATH=',
             '# LANG_TRANSLATE_SOURCE=',
             '# LANG_TRANSLATE_TARGETS=',
