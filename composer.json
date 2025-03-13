@@ -1,6 +1,6 @@
 {
   "name": "moztopia/artisanize",
-  "description": "A package for adding reusable Artisan commands to Laravel 11.4+ projects.",
+  "description": "A package of useful Artisan commands to Laravel 11+ projects.",
   "type": "library",
   "license": "MIT",
   "authors": [
