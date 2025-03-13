@@ -11,8 +11,8 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^8.2",
-    "laravel/framework": "^11.0"
+    "php": ">=8.1",
+    "laravel/framework": ">=11.0"
   },
   "autoload": {
     "psr-4": {
@@ -22,7 +22,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Moztopia\\Artisanize\\ServiceProvider"
+        "Moztopia\\Artisanize\\ArtisanizeServiceProvider"
       ]
     }
   },
