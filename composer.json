@@ -1,0 +1,37 @@
+{
+  "name": "moztopia/artisanize",
+  "description": "A package for adding reusable Artisan commands to Laravel 11.4+ projects.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Code Monkeys",
+      "email": "artisanize@moztopia.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Moztopia\\Artisanize\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Moztopia\\Artisanize\\ServiceProvider"
+      ]
+    }
+  },
+  "keywords": [
+    "artisan",
+    "laravel",
+    "commands",
+    "artisanize",
+    "ai",
+    "translate"
+  ]
+}
