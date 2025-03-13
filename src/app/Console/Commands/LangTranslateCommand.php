@@ -75,29 +75,29 @@ class LangTranslateCommand extends Command
 
         if (in_array($sourceDir, $targets)) {
             $targets = array_diff($targets, [$sourceDir]);
-            $this->warn(trans('LangTranslate.skipping_source_folder', ['folder' => $sourceDir]));
+            $this->warn(trans('artisanize.skipping_source_folder', ['folder' => $sourceDir]));
         }
 
         if (empty($targets)) {
-            $this->error(trans('LangTranslate.no_valid_targets'));
+            $this->error(trans('artisanize.no_valid_targets'));
             return 1;
         }
 
         $files = $this->resolveFiles($filesOption, $sourceLangPath);
 
         if (empty($files)) {
-            $this->error(trans('LangTranslate.no_files_matched'));
+            $this->error(trans('artisanize.no_files_matched'));
             return 1;
         }
 
         foreach ($targets as $target) {
-            $this->info(trans('LangTranslate.processing_target', ['target' => $target]));
+            $this->info(trans('artisanize.processing_target', ['target' => $target]));
             foreach ($files as $file) {
                 $this->translateSpecificFile($target, $file, $sourceLangPath, $basePath, $overwrite, $extraParameters);
             }
         }
 
-        $this->info(trans('LangTranslate.translation_completed'));
+        $this->info(trans('artisanize.translation_completed'));
         return 0;
     }
 
@@ -207,7 +207,7 @@ class LangTranslateCommand extends Command
         $targetLangPath = base_path("{$basePath}/{$target}");
         if (!File::exists($targetLangPath)) {
             File::makeDirectory($targetLangPath, 0755, true);
-            $this->info(trans('LangTranslate.created_language_folder', ['folder' => $target]));
+            $this->info(trans('artisanize.created_language_folder', ['folder' => $target]));
         }
 
         $sourceFilePath = $sourceLangPath . '/' . $file . '.php';
@@ -216,19 +216,19 @@ class LangTranslateCommand extends Command
         if (File::exists($targetFilePath)) {
             if ($overwrite) {
                 File::delete($targetFilePath);
-                $this->info(trans('LangTranslate.overwriting_file', ['file' => $file]));
+                $this->info(trans('artisanize.overwriting_file', ['file' => $file]));
             } else {
-                $this->warn(trans('LangTranslate.file_exists', ['file' => $file, 'target' => $target]));
+                $this->warn(trans('artisanize.file_exists', ['file' => $file, 'target' => $target]));
                 return;
             }
         }
 
         if (!File::exists($sourceFilePath)) {
-            $this->error(trans('LangTranslate.source_file_not_found', ['file' => $file, 'path' => $sourceLangPath]));
+            $this->error(trans('artisanize.source_file_not_found', ['file' => $file, 'path' => $sourceLangPath]));
             return;
         }
 
-        $this->info(trans('LangTranslate.translating_file', ['file' => $file, 'target' => $target, 'parameters' => json_encode($extraParameters)]));
+        $this->info(trans('artisanize.translating_file', ['file' => $file, 'target' => $target, 'parameters' => json_encode($extraParameters)]));
         $this->performTranslation($sourceFilePath, $targetFilePath, $target);
     }
 
@@ -247,7 +247,7 @@ class LangTranslateCommand extends Command
         $apiKey = env('LANG_TRANSLATE_GEMINI_KEY');
 
         if (!$apiKey) {
-            $this->error(trans('LangTranslate.gemini_api_key_missing'));
+            $this->error(trans('artisanize.gemini_api_key_missing'));
             return;
         }
         $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
@@ -272,7 +272,7 @@ class LangTranslateCommand extends Command
                 $translatedText = Arr::get($apiResponseData, 'candidates.0.content.parts.0.text');
 
                 if (!$translatedText) {
-                    $this->error(trans('LangTranslate.gemini_translation_error'));
+                    $this->error(trans('artisanize.gemini_translation_error'));
                     $this->error(json_encode($apiResponseData, JSON_PRETTY_PRINT));
                     return;
                 }
@@ -291,16 +291,16 @@ class LangTranslateCommand extends Command
                 $filePutResult = File::put($targetFilePath, $translatedText);
 
                 if ($filePutResult !== false) {
-                    $this->info(trans('LangTranslate.saved_translated_file', ['file' => $targetFilePath]));
+                    $this->info(trans('artisanize.saved_translated_file', ['file' => $targetFilePath]));
                 } else {
-                    $this->error(trans('LangTranslate.error_writing_file', ['file' => $targetFilePath]));
+                    $this->error(trans('artisanize.error_writing_file', ['file' => $targetFilePath]));
                 }
             } else {
-                $this->error(trans('LangTranslate.gemini_request_failed', ['status' => $response->status()]));
-                $this->error(trans('LangTranslate.gemini_response_body', ['body' => $response->body()]));
+                $this->error(trans('artisanize.gemini_request_failed', ['status' => $response->status()]));
+                $this->error(trans('artisanize.gemini_response_body', ['body' => $response->body()]));
             }
         } catch (\Exception $e) {
-            $this->error(trans('LangTranslate.gemini_request_error', ['error' => $e->getMessage()]));
+            $this->error(trans('artisanize.gemini_request_error', ['error' => $e->getMessage()]));
         }
     }
 }

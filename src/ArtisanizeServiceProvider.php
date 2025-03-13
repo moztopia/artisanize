@@ -9,8 +9,8 @@ class ArtisanizeServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/Commands/LangTranslateCommand.php' => base_path('app/Console/Commands/LangTranslateCommand.php'),
-            __DIR__ . '/resources/lang/' => resource_path('lang/vendor/artisanize'),
+            __DIR__ . 'app/Console/Commands/LangTranslateCommand.php' => base_path('app/Console/Commands/LangTranslateCommand.php'),
+            __DIR__ . 'lang/' => resource_path('lang/vendor/artisanize'),
         ], 'artisanize');
 
         $this->updateEnvFile();
