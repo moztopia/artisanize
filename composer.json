@@ -26,6 +26,11 @@
       ]
     }
   },
+  "scripts": {
+    "post-autoload-dump": [
+      "@php artisan vendor:publish --tag=artisanize --ansi --force"
+    ]
+  },
   "keywords": [
     "artisan",
     "laravel",

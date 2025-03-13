@@ -9,8 +9,8 @@ class ArtisanizeServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . 'app/Console/Commands/LangTranslateCommand.php' => base_path('app/Console/Commands/LangTranslateCommand.php'),
-            __DIR__ . 'lang/' => resource_path('lang/vendor/artisanize'),
+            __DIR__ . '/app/Console/Commands/LangTranslateCommand.php' => base_path('app/Console/Commands/LangTranslateCommand.php'),
+            __DIR__ . '/lang/' => base_path('lang/'),
         ], 'artisanize');
 
         $this->updateEnvFile();
@@ -22,12 +22,15 @@ class ArtisanizeServiceProvider extends ServiceProvider
         $envExamplePath = base_path('.env.example');
 
         $envKeys = [
+            '',
+            '# moztopia/artisanize - lang:translate',
+            '#',
             '# LANG_TRANSLATE_BASEPATH=',
             '# LANG_TRANSLATE_SOURCE=',
             '# LANG_TRANSLATE_TARGETS=',
             '# LANG_TRANSLATE_FILES=',
             '# LANG_TRANSLATE_PARAMETERS=',
-            'LANG_TRANSLATE_LANGUAGES=en,th,de,es',
+            'LANG_TRANSLATE_LANGUAGES=en,zh,hi,es,fr,th,de,ar',
             'LANG_TRANSLATE_GEMINI_KEY=your-(aistudio.google.com)-key',
         ];
 
