@@ -1,0 +1,28 @@
+/home/mozrin/Code/artisanize
+├── composer.json
+├── LICENSE
+├── README.md
+├── src
+│   ├── app
+│   │   └── Console
+│   │       └── Commands
+│   │           └── LangTranslateCommand.php
+│   ├── ArtisanizeServiceProvider.php
+│   └── lang
+│       └── en
+│           └── artisanize.php
+├── text.txt
+├── tree.txt
+└── vendor
+    ├── autoload.php
+    └── composer
+        ├── autoload_classmap.php
+        ├── autoload_namespaces.php
+        ├── autoload_psr4.php
+        ├── autoload_real.php
+        ├── autoload_static.php
+        ├── ClassLoader.php
+        ├── LICENSE
+        └── platform_check.php
+
+9 directories, 17 files
