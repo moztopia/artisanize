@@ -45,6 +45,10 @@ composer require moztopia/artisanize
 composer vendor:publish --tag=artisanize
 ```
 
+# !!! CRITICAL !!!
+
+After installing and running the vendor:publish command there will be a new folder in your lang/ folder called `.source`. You should copy any file(s) that you want to be ai-translated (regardless of their language) into this folder. This is the source folder that the tool uses to generate language files in all of the ISO-639 folder names.
+
 ## Tools
 
 ### `lang:translate`
