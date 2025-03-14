@@ -20,12 +20,7 @@ class LangTranslateCommand extends Command
      * @var string
      */
 
-    protected $signature = 'lang:translate 
-                                {--targets=} 
-                                {--files=} 
-                                {--overwrite} 
-                                {--source=} 
-                                {--install}';
+    protected $signature = 'lang:translate {--targets=} {--files=} {--overwrite} {--source=}';
 
     /**
      * The description of the command.
@@ -44,11 +39,6 @@ class LangTranslateCommand extends Command
     public function handle()
     {
         $langPath = base_path('lang');
-
-        if (!File::exists($langPath)) {
-            $this->warn("The '/lang' folder does not exist. Running the install process...");
-            return $this->install();
-        }
 
         $basePath = env('LANG_TRANSLATE_BASEPATH', 'lang');
         $sourceDir = $this->option('source') ?? env('LANG_TRANSLATE_SOURCE', '.source');
@@ -102,43 +92,6 @@ class LangTranslateCommand extends Command
     }
 
     /**
-     * Installs the necessary language directories and files for the translation process.
-     *
-     * This method checks if the 'lang' directory exists. If not, it creates the required 
-     * '.source' directory inside 'lang' and copies the contents of the default 'en' 
-     * language folder to it, ensuring the environment is set up for translation.
-     *
-     * @return int Returns 0 on successful installation, or 1 if an error occurs.
-     */
-
-    protected function install()
-    {
-        $langPath = base_path('lang');
-
-        if (!File::exists($langPath)) {
-            $this->warn("The '/lang' folder does not exist. Run 'php artisan lang:publish' to generate it.");
-            return 1;
-        }
-
-        $sourcePath = base_path('lang/.source');
-        $defaultLangPath = base_path('lang/en');
-
-        if (!File::exists($defaultLangPath)) {
-            $this->error("The default language folder 'lang/en' does not exist. Ensure 'php artisan lang:publish' has been run.");
-            return 1;
-        }
-
-        if (!File::exists($sourcePath)) {
-            File::makeDirectory($sourcePath, 0755, true);
-            $this->info("Created '/lang/.source' folder.");
-        }
-
-        File::copyDirectory($defaultLangPath, $sourcePath);
-        $this->info("Copied 'lang/en' to '/lang/.source'. Installation complete.");
-        return 0;
-    }
-
-    /**
      * Parses and retrieves extra parameters from the environment variable LANG_TRANSLATE_PARAMETERS.
      *
      * @return array
@@ -171,6 +124,7 @@ class LangTranslateCommand extends Command
      * @param string $sourceLangPath
      * @return array
      */
+
     protected function resolveFiles($filesOption, $sourceLangPath)
     {
         $patterns = explode(',', $filesOption);
@@ -202,6 +156,7 @@ class LangTranslateCommand extends Command
      * @param array $extraParameters
      * @return void
      */
+
     protected function translateSpecificFile($target, $file, $sourceLangPath, $basePath, $overwrite, $extraParameters)
     {
         $targetLangPath = base_path("{$basePath}/{$target}");
@@ -240,6 +195,7 @@ class LangTranslateCommand extends Command
      * @param string $langCode
      * @return void
      */
+
     protected function performTranslation(string $sourceFilePath, string $targetFilePath, string $langCode)
     {
         $sourceFileContents = File::get($sourceFilePath);

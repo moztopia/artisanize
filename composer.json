@@ -1,6 +1,6 @@
 {
   "name": "moztopia/artisanize",
-  "description": "A package for adding reusable Artisan commands to Laravel 11.4+ projects.",
+  "description": "A package of useful Artisan commands to Laravel 11+ projects.",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -19,12 +19,22 @@
       "Moztopia\\Artisanize\\": "src/"
     }
   },
+  "support": {
+    "issues": "https://github.com/moztopia/artisanize/issues"
+  },
   "extra": {
     "laravel": {
       "providers": [
         "Moztopia\\Artisanize\\ArtisanizeServiceProvider"
       ]
     }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "echo 'post-autoload-dump script 1 executed'",
+      "@php artisan vendor:publish --tag=artisanize --ansi --force",
+      "echo 'post-autoload-dump script 2 executed'"
+    ]
   },
   "keywords": [
     "artisan",
