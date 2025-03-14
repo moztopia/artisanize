@@ -23,7 +23,9 @@ As developers, we often need efficient tools to streamline testing processes. Th
 If you have a desire to use the `lang:translate` tool, you will NEED a Google AI Studio API key. At the time of this tool's creation, the process was very easy and could be completed in a couple of minutes. Specifically:
 
 `1. Go -> https://aistudio.google.com`
+
 `2. Click the (Get API key) link`
+
 `3. Complete Google's Process`
 
 Hang on to the key for after the installation and then open the .env file and put your key in the variable ... it will look something like this:
