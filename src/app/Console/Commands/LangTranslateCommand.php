@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-// use Illuminate\Support\Facades\File;
-// use Illuminate\Support\Facades\Http;
-// use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
 
 /**
  * Class LangTranslate
@@ -20,7 +20,7 @@ class LangTranslateCommand extends Command
      * @var string
      */
 
-    protected $signature = 'lang:translate'; // {--targets=} {--files=} {--overwrite} {--source=}';
+    protected $signature = 'lang:translate {--targets=} {--files=} {--overwrite} {--source=}';
 
     /**
      * The description of the command.
@@ -124,6 +124,7 @@ class LangTranslateCommand extends Command
      * @param string $sourceLangPath
      * @return array
      */
+
     protected function resolveFiles($filesOption, $sourceLangPath)
     {
         $patterns = explode(',', $filesOption);
@@ -155,6 +156,7 @@ class LangTranslateCommand extends Command
      * @param array $extraParameters
      * @return void
      */
+
     protected function translateSpecificFile($target, $file, $sourceLangPath, $basePath, $overwrite, $extraParameters)
     {
         $targetLangPath = base_path("{$basePath}/{$target}");
@@ -193,6 +195,7 @@ class LangTranslateCommand extends Command
      * @param string $langCode
      * @return void
      */
+
     protected function performTranslation(string $sourceFilePath, string $targetFilePath, string $langCode)
     {
         $sourceFileContents = File::get($sourceFilePath);
