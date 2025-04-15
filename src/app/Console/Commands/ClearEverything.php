@@ -13,48 +13,36 @@ class ClearEverything extends Command
 
     public function handle()
     {
-        $this->info('Clearing Application Cache...');
+        $this->output->newLine();
+        $this->output->writeLn('artisanize:clear-everything');
+        $this->output->newLine();
+        $this->output->writeln($this->myinfo('Clearing Application Cache...'));
         Artisan::call('cache:clear');
-        $this->info('Cleared Application Cache');
-
-        $this->info('Clearing Route Cache...');
+        $this->output->writeln($this->myinfo('Clearing Route Cache...'));
         Artisan::call('route:clear');
-        $this->info('Cleared Route Cache');
-
-        $this->info('Clearing Configuration Cache...');
+        $this->output->writeln($this->myinfo('Clearing Configuration Cache...'));
         Artisan::call('config:clear');
-        $this->info('Cleared Configuration Cache');
-
-        $this->info('Clearing Compiled Views...');
+        $this->output->writeln($this->myinfo('Clearing Compiled Views...'));
         Artisan::call('view:clear');
-        $this->info('Cleared Compiled Views');
-
-        $this->info('Clearing Event Cache...');
+        $this->output->writeln($this->myinfo('Clearing Event Cache...'));
         Artisan::call('event:clear');
-        $this->info('Cleared Event Cache');
-
-        $this->info('Clearing Compiled Classes...');
+        $this->output->writeln($this->myinfo('Clearing Compiled Classes...'));
         Artisan::call('clear-compiled');
-        $this->info('Cleared Compiled Classes');
-
-        $this->info('Clearing Optimized Class Loader...');
+        $this->output->writeln($this->myinfo('Clearing Optimized Class Loader...'));
         Artisan::call('optimize:clear');
-        $this->info('Cleared Optimized Class Loader');
-
-        $this->info('Restarting Queue Worker...');
+        $this->output->writeln($this->myinfo('Restarting Queue Worker...'));
         Artisan::call('queue:restart');
-        $this->info('Restarted Queue Worker');
-
-        $this->info('Recompiling Configuration Cache...');
+        $this->output->writeln($this->myinfo('Recompiling Configuration Cache...'));
         Artisan::call('config:cache');
-        $this->info('Recompiled Configuration Cache');
-
-        $this->info('Recompiling Route Cache...');
+        $this->output->writeln($this->myinfo('Recompiling Route Cache...'));
         Artisan::call('route:cache');
-        $this->info('Recompiled Route Cache');
-
-        $this->info('Recompiling Optimized Class Loader...');
+        $this->output->writeln($this->myinfo('Recompiling Optimized Class Loader...'));
         Artisan::call('optimize');
-        $this->info('Recompiled Optimized Class Loader');
+        $this->output->newLine();
+    }
+
+    private function myinfo($message, $prefix = '  ', $suffix = ' ')
+    {
+        return $prefix . '<bg=blue;fg=white> INFO </>' . $suffix . $message;
     }
 }
