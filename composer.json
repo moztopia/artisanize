@@ -30,10 +30,8 @@
     }
   },
   "scripts": {
-    "post-autoload-dump": [
-      "echo 'post-autoload-dump script 1 executed'",
-      "@php artisan vendor:publish --tag=artisanize --ansi --force",
-      "echo 'post-autoload-dump script 2 executed'"
+    "post-require-cmd": [
+      "@php artisan vendor:publish --tag=artisanize --ansi"
     ]
   },
   "keywords": [
