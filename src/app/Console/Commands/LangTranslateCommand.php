@@ -65,29 +65,29 @@ class LangTranslateCommand extends Command
 
         if (in_array($sourceDir, $targets)) {
             $targets = array_diff($targets, [$sourceDir]);
-            $this->warn(trans('artisanize.skipping_source_folder', ['folder' => $sourceDir]));
+            $this->mywarn(trans('artisanize.skipping_source_folder', ['folder' => $sourceDir]));
         }
 
         if (empty($targets)) {
-            $this->error(trans('artisanize.no_valid_targets'));
+            $this->myerror(trans('artisanize.no_valid_targets'));
             return 1;
         }
 
         $files = $this->resolveFiles($filesOption, $sourceLangPath);
 
         if (empty($files)) {
-            $this->error(trans('artisanize.no_files_matched'));
+            $this->myerror(trans('artisanize.no_files_matched'));
             return 1;
         }
 
         foreach ($targets as $target) {
-            $this->info(trans('artisanize.processing_target', ['target' => $target]));
+            $this->myinfo(trans('artisanize.processing_target', ['target' => $target]));
             foreach ($files as $file) {
                 $this->translateSpecificFile($target, $file, $sourceLangPath, $basePath, $overwrite, $extraParameters);
             }
         }
 
-        $this->info(trans('artisanize.translation_completed'));
+        $this->myinfo(trans('artisanize.translation_completed'));
         return 0;
     }
 
@@ -162,7 +162,7 @@ class LangTranslateCommand extends Command
         $targetLangPath = base_path("{$basePath}/{$target}");
         if (!File::exists($targetLangPath)) {
             File::makeDirectory($targetLangPath, 0755, true);
-            $this->info(trans('artisanize.created_language_folder', ['folder' => $target]));
+            $this->myinfo(trans('artisanize.created_language_folder', ['folder' => $target]));
         }
 
         $sourceFilePath = $sourceLangPath . '/' . $file . '.php';
@@ -171,19 +171,19 @@ class LangTranslateCommand extends Command
         if (File::exists($targetFilePath)) {
             if ($overwrite) {
                 File::delete($targetFilePath);
-                $this->info(trans('artisanize.overwriting_file', ['file' => $file]));
+                $this->myinfo(trans('artisanize.overwriting_file', ['file' => $file]));
             } else {
-                $this->warn(trans('artisanize.file_exists', ['file' => $file, 'target' => $target]));
+                $this->mywarn(trans('artisanize.file_exists', ['file' => $file, 'target' => $target]));
                 return;
             }
         }
 
         if (!File::exists($sourceFilePath)) {
-            $this->error(trans('artisanize.source_file_not_found', ['file' => $file, 'path' => $sourceLangPath]));
+            $this->myerror(trans('artisanize.source_file_not_found', ['file' => $file, 'path' => $sourceLangPath]));
             return;
         }
 
-        $this->info(trans('artisanize.translating_file', ['file' => $file, 'target' => $target, 'parameters' => json_encode($extraParameters)]));
+        $this->myinfo(trans('artisanize.translating_file', ['file' => $file, 'target' => $target, 'parameters' => json_encode($extraParameters)]));
         $this->performTranslation($sourceFilePath, $targetFilePath, $target);
     }
 
@@ -203,7 +203,7 @@ class LangTranslateCommand extends Command
         $apiKey = env('LANG_TRANSLATE_GEMINI_KEY');
 
         if (!$apiKey) {
-            $this->error(trans('artisanize.gemini_api_key_missing'));
+            $this->myerror(trans('artisanize.gemini_api_key_missing'));
             return;
         }
         $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
@@ -228,8 +228,8 @@ class LangTranslateCommand extends Command
                 $translatedText = Arr::get($apiResponseData, 'candidates.0.content.parts.0.text');
 
                 if (!$translatedText) {
-                    $this->error(trans('artisanize.gemini_translation_error'));
-                    $this->error(json_encode($apiResponseData, JSON_PRETTY_PRINT));
+                    $this->myerror(trans('artisanize.gemini_translation_error'));
+                    $this->myerror(json_encode($apiResponseData, JSON_PRETTY_PRINT));
                     return;
                 }
 
@@ -247,16 +247,31 @@ class LangTranslateCommand extends Command
                 $filePutResult = File::put($targetFilePath, $translatedText);
 
                 if ($filePutResult !== false) {
-                    $this->info(trans('artisanize.saved_translated_file', ['file' => $targetFilePath]));
+                    $this->myinfo(trans('artisanize.saved_translated_file', ['file' => $targetFilePath]));
                 } else {
-                    $this->error(trans('artisanize.error_writing_file', ['file' => $targetFilePath]));
+                    $this->myerror(trans('artisanize.error_writing_file', ['file' => $targetFilePath]));
                 }
             } else {
-                $this->error(trans('artisanize.gemini_request_failed', ['status' => $response->status()]));
-                $this->error(trans('artisanize.gemini_response_body', ['body' => $response->body()]));
+                $this->myerror(trans('artisanize.gemini_request_failed', ['status' => $response->status()]));
+                $this->myerror(trans('artisanize.gemini_response_body', ['body' => $response->body()]));
             }
         } catch (\Exception $e) {
-            $this->error(trans('artisanize.gemini_request_error', ['error' => $e->getMessage()]));
+            $this->myerror(trans('artisanize.gemini_request_error', ['error' => $e->getMessage()]));
         }
+    }
+
+    private function mywarn($message, $prefix = '  ', $suffix = ' ')
+    {
+        return $prefix . '<bg=red;fg=yellow> WARNING </>' . $suffix . $message;
+    }
+
+    private function myerror($message, $prefix = '  ', $suffix = ' ')
+    {
+        return $prefix . '<bg=red;fg=white> ERROR </>' . $suffix . $message;
+    }
+
+    private function myinfo($message, $prefix = '  ', $suffix = ' ')
+    {
+        return $prefix . '<bg=blue;fg=white> INFO </>' . $suffix . $message;
     }
 }
